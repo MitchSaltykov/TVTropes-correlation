@@ -5,6 +5,21 @@
   <%= @movie.name %>
 </p>
 
+<p>
+  Tropes:
+</p>
+<table>
+  <tr>
+    <th>Name</th>
+    <th>URL</th>
+  </tr>
 
-<%= link_to 'Edit', edit_movie_path(@movie) %> |
+  <% @movie.tropes.each do |trope| %>
+    <tr>
+      <td><%= trope.name %></td>
+      <td><%= trope.url %></td>
+    </tr>
+  <% end %>
+</table>
+
 <%= link_to 'Back', movies_path %>

@@ -1,8 +1,8 @@
 class MoviesController < ApplicationController
-require 'nokogiri'
-require 'open-uri'
+  require 'nokogiri'
+  require 'open-uri'
 
-EMPTY_PAGE_TEXT = 'Click the edit button to start this new page.'
+  EMPTY_PAGE_TEXT = 'Click the edit button to start this new page.'
 
   def index
     @movies = Movie.by_name
@@ -26,6 +26,15 @@ EMPTY_PAGE_TEXT = 'Click the edit button to start this new page.'
     wikitext = page.search('#wikitext')
     empty_page = wikitext && wikitext.children.first.text.strip == EMPTY_PAGE_TEXT
 
+    trope_urls = page.css('div#wikitext > ul > li > a.twikilink').map { |link| link['href'] }.uniq
+    tropes = trope_urls.map do |trope_url|
+      trope = Trope.find_or_initialize_by_url(trope_url)
+      trope.name = trope_url.split('/').last.underscore.titleize
+
+      trope
+    end
+    @movie.tropes = tropes.sort_by(&:name)
+
     respond_to do |format|
       if !empty_page && @movie.save
         flash[:notice] = 'Movie was successfully created.'
@@ -40,5 +49,7 @@ EMPTY_PAGE_TEXT = 'Click the edit button to start this new page.'
   def destroy
     @movie = Movie.find(params[:id])
     @movie.destroy
+
+    redirect_to :action => :index
   end
 end

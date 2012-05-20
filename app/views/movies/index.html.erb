@@ -1,22 +1,26 @@
 <h1>Listing movies</h1>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th>URL</th>
-    <th></th>
-    <th></th>
-  </tr>
+<% if @movies.any? %>
+  <table>
+    <tr>
+      <th>Name</th>
+      <th>URL</th>
+      <th></th>
+      <th></th>
+    </tr>
 
-<% @movies.each do |movie| %>
-  <tr>
-    <td><%= movie.name %></td>
-    <td><%= movie.url %></td>
-    <td><%= link_to 'Show', movie %></td>
-    <td><%= link_to 'Destroy', movie, confirm: 'Are you sure?', method: :delete %></td>
-  </tr>
+    <% @movies.each do |movie| %>
+      <tr>
+        <td><%= movie.name %></td>
+        <td><%= movie.url %></td>
+        <td><%= link_to 'Show', movie %></td>
+        <td><%= link_to 'Destroy', movie, confirm: 'Are you sure?', method: :delete %></td>
+      </tr>
+    <% end %>
+  </table>
+<% else %>
+  Add some movies!
 <% end %>
-</table>
 
 <br />
 

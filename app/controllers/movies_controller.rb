@@ -1,6 +1,9 @@
 class MoviesController < ApplicationController
+require 'nokogiri'
+require 'open-uri'
+
   def index
-    @movies = Movie.all
+    @movies = Movie.by_name
   end
 
   def show
@@ -12,12 +15,18 @@ class MoviesController < ApplicationController
   end
 
   def create
-    @movie = Movie.new(params[:movie])
-
+    url = params[:movie][:url]
+    page = Nokogiri::HTML(open(url))
+    name = page.search('.pagetitle span').first.content
+    @movie = Movie.new
+    @movie.name = name
+    @movie.url = url
     respond_to do |format|
       if @movie.save
-        format.html { redirect_to @movie, notice: 'Movie was successfully created.' }
+        flash[:notice] = 'Movie was successfully created.'
+        format.html { redirect_to @movie }
       else
+        flash.now[:error] = 'Movie not created.'
         format.html { render :action => :new }
       end
     end

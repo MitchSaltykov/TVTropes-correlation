@@ -1,3 +1,5 @@
 class Movie < ActiveRecord::Base
-  attr_accessible :name
+  scope :by_name, :order => :name
+
+  validates_presence_of :name, :url
 end

@@ -10,6 +10,13 @@ class MoviesController < ApplicationController
 
   def show
     @movie = Movie.find(params[:id])
+
+    similar_movies = {}
+    (Movie.all - [@movie]).each do |other_movie|
+      movie_correlation = @movie.correlation(other_movie)
+      similar_movies[other_movie] = movie_correlation unless movie_correlation == 0
+    end
+    @most_similar_movies = similar_movies.sort_by {|_,correlation| correlation}.last(5).reverse
   end
 
   def new

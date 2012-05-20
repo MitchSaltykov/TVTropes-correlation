@@ -4,4 +4,8 @@ class Movie < ActiveRecord::Base
   has_many :tropes, :through => :movie_tropes, :autosave => true
 
   validates_presence_of :name, :url
+
+  def correlation(other)
+    (tropes & other.tropes).size.to_f / [tropes.size, other.tropes.size].min
+  end
 end

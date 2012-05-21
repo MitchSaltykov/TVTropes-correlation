@@ -14,13 +14,13 @@
   </tr>
   <% @most_similar_movies.each do |other_movie, correlation| %>
     <tr>
-      <% common_tropes = (@movie.tropes & other_movie.tropes).map(&:name) %>
+      <% common_tropes = (@movie.tropes & other_movie.tropes) %>
       <td><%= link_to other_movie.name, other_movie %></td>
       <td>
-          <%= number_to_percentage correlation, :precision => 2 %>
-          <%= "(#{common_tropes.size}/#{[@movie.tropes.size, other_movie.tropes.size].min})" %>
+        <%= number_to_percentage correlation, :precision => 2 %>
+        <%= "(#{common_tropes.size}/#{[@movie.tropes.size, other_movie.tropes.size].min})" %>
       </td>
-      <td><%= common_tropes.join ', ' %></td>
+      <td><%= common_trope_links(common_tropes) %></td>
     </tr>
   <% end %>
 </table>
@@ -38,7 +38,7 @@
   <% @movie.tropes.each do |trope| %>
     <tr>
       <td><%= trope.name %></td>
-      <td><%= trope.url %></td>
+      <td><%= link_to trope.url, trope.url %></td>
     </tr>
   <% end %>
 </table>

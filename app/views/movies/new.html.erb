@@ -8,8 +8,10 @@
 <h1>New movie</h1>
 
 <%= form_for @movie do |form| %>
-    <%= form.label :url %>
-    <%= form.text_field :url, :size => 100 %>
-    <%= form.submit %>
+  <%= form.label :url %>
+  <%= form.text_field :url, :size => 100 %>
+  <br/>
+  <%= form.submit 'Add To Database' %>
 <% end %>
+
 <%= link_to 'Back', movies_path %>

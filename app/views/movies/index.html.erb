@@ -1,5 +1,7 @@
 <h1>Listing movies</h1>
 
+<h3>Add a <%= link_to 'new movie', new_movie_path %> from TVTropes</h3>
+
 <% if @movies.any? %>
   <table border=1>
     <tr>
@@ -11,7 +13,7 @@
     <% @movies.each do |movie| %>
       <tr>
         <td><%= link_to movie.name, movie %></td>
-        <td><%= movie.url %></td>
+        <td><%= link_to movie.url, movie.url %></td>
         <td><%= link_to 'Destroy', movie, confirm: 'Are you sure?', method: :delete %></td>
       </tr>
     <% end %>
@@ -19,7 +21,3 @@
 <% else %>
   Add some movies!
 <% end %>
-
-<br />
-
-<%= link_to 'New Movie', new_movie_path %>

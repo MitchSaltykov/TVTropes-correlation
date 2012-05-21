@@ -16,7 +16,7 @@ class MoviesController < ApplicationController
       movie_correlation = @movie.correlation(other_movie)
       similar_movies[other_movie] = movie_correlation unless movie_correlation == 0
     end
-    @most_similar_movies = similar_movies.sort_by {|_,correlation| correlation}.last(5).reverse
+    @most_similar_movies = similar_movies.sort_by { |_, correlation| correlation }.last(5).reverse
   end
 
   def new
@@ -24,23 +24,28 @@ class MoviesController < ApplicationController
   end
 
   def create
-    url = params[:movie][:url]
-    page = Nokogiri::HTML(open(url))
-    name = page.search('.pagetitle span').first.content
-    @movie = Movie.new
-    @movie.name = name
-    @movie.url = url
-    wikitext = page.search('#wikitext')
-    empty_page = wikitext && wikitext.children.first.text.strip == EMPTY_PAGE_TEXT
+    begin
+      url = params[:movie][:url]
+      page = Nokogiri::HTML(open(url))
+      name = page.search('.pagetitle span').first.content
+      @movie = Movie.new
+      @movie.name = name
+      @movie.url = url
+      wikitext = page.search('#wikitext')
+      empty_page = wikitext && wikitext.children.first.text.strip == EMPTY_PAGE_TEXT
 
-    trope_urls = page.css('div#wikitext > ul > li > a.twikilink').map { |link| link['href'] }.uniq
-    tropes = trope_urls.map do |trope_url|
-      trope = Trope.find_or_initialize_by_url(trope_url)
-      trope.name = trope_url.split('/').last.underscore.titleize
+      trope_urls = page.css('div#wikitext ul > li > a.twikilink').map { |link| link['href'] }.uniq
+      tropes = trope_urls.map do |trope_url|
+        trope = Trope.find_or_initialize_by_url(trope_url)
+        trope.name = trope_url.split('/').last.underscore.titleize
 
-      trope
+        trope
+      end
+      @movie.tropes = tropes.sort_by(&:name)
+    rescue
+      empty_page = true
+      @movie = Movie.new
     end
-    @movie.tropes = tropes.sort_by(&:name)
 
     respond_to do |format|
       if !empty_page && @movie.save

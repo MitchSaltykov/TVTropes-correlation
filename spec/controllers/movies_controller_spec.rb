@@ -68,6 +68,40 @@ describe MoviesController do
       and_this_is_for.url.should == 'http://tvtropes.org/pmwiki/pmwiki.php/Main/AndThisIsFor'
     end
 
+    it 'should log tropes nested in folders' do
+      movie_page = <<-PAGE_CONTENTS
+        <div class='pagetitle'>
+          Film:  <span>Alien</span>
+        </div>
+        <div id='wikitext'>
+          <h2><em>Alien</em> contains examples of:</h2>
+
+          <div class='folder'>
+            <ul>
+              <li>
+                  <a class='twikilink' href='http://tvtropes.org/pmwiki/pmwiki.php/Main/ActionGirl' title='http://tvtropes.org/pmwiki/pmwiki.php/Main/ActionGirl'>Action Girl</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      PAGE_CONTENTS
+
+      mock_readable = stub(:read => movie_page)
+      controller.should_receive(:open).and_return(mock_readable)
+
+      post :create, :movie => {:url => target_url}
+
+      created_movie = Movie.first
+      created_movie.name.should == 'Alien'
+      created_movie.url.should == target_url
+
+      tropes = created_movie.tropes
+      tropes.size.should == 1
+      action_girl = tropes.first
+      action_girl.name.should == 'Action Girl'
+      action_girl.url.should == 'http://tvtropes.org/pmwiki/pmwiki.php/Main/ActionGirl'
+    end
+
     it 'should reject movies with no page content' do
       new_entry_page = <<-PAGE_CONTENTS
         <div class='pagetitle'>

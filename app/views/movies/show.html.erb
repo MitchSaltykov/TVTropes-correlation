@@ -1,10 +1,14 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <b>Name:</b>
+  <b>Movie:</b>
   <%= @movie.name %>
 </p>
 
+<p>
+    <b>TVTropes URL:</b>
+    <%= link_to @movie.url, @movie.url %>
+</p>
 <p>Similar movies:</p>
 <table border=1>
   <tr>
@@ -30,15 +34,9 @@
   Tropes:
 </p>
 <table border=1>
-  <tr>
-    <th>Name</th>
-    <th>URL</th>
-  </tr>
-
   <% @movie.tropes.each do |trope| %>
     <tr>
-      <td><%= trope.name %></td>
-      <td><%= link_to trope.url, trope.url %></td>
+      <td><%= link_to trope.name, trope %></td>
     </tr>
   <% end %>
 </table>

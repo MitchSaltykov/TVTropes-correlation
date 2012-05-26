@@ -5,6 +5,13 @@
 <% end %>
 <% if flash[:error] %>
   <p class="error"><%= flash[:error] %></p>
+  <% if @movie.errors.any? %>
+    <ul>
+      <% @movie.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  <% end %>
 <% end %>
 
 <%= form_for @movie do |form| %>

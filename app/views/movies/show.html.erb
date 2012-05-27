@@ -12,13 +12,13 @@
 <p>Similar movies:</p>
 <table border=1>
   <tr>
-    <th>Name</th>
+    <th>Title</th>
     <th>Commonality</th>
     <th>Common Tropes</th>
   </tr>
   <% @most_similar_movies.each do |other_movie, correlation| %>
     <tr>
-      <% common_tropes = (@movie.tropes & other_movie.tropes) %>
+      <% common_tropes = (@movie.tropes & other_movie.tropes).sort_by(&:name) %>
       <td><%= link_to other_movie.name, other_movie %></td>
       <td>
         <%= number_to_percentage correlation, :precision => 2 %>
@@ -34,7 +34,7 @@
   Tropes:
 </p>
 <table border=1>
-  <% @movie.tropes.each do |trope| %>
+  <% @movie.tropes.by_name.each do |trope| %>
     <tr>
       <td><%= link_to trope.name, trope %></td>
     </tr>

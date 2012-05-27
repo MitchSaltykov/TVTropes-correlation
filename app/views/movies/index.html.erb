@@ -5,12 +5,12 @@
 <% if @movies.any? %>
   <table border=1>
     <tr>
-      <th>Name</th>
+      <th>Title</th>
       <th>URL</th>
       <th>(X)</th>
     </tr>
 
-    <% @movies.each do |movie| %>
+    <% @movies.by_name.each do |movie| %>
       <tr>
         <td><%= link_to movie.name, movie %></td>
         <td><%= link_to movie.url, movie.url %></td>

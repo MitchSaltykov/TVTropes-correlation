@@ -12,7 +12,7 @@
 
 <p>Movies employing this trope:</p>
 <table border=1>
-  <% @trope.movies.each do |movie| %>
+  <% @trope.movies.by_name.each do |movie| %>
     <tr>
       <td><%= link_to movie.name, movie %></td>
     </tr>

@@ -171,4 +171,9 @@ describe 'Movie#create_from_url' do
     new_movie, empty_page = Movie.create_from_url(target_url)
     empty_page.should be_true
   end
+
+  it 'should strip whitespace around the url' do
+    Movie.should_receive(:open).with(target_url)
+    Movie.create_from_url(" #{target_url} ")
+  end
 end

@@ -15,10 +15,11 @@ class Movie < ActiveRecord::Base
 
   def self.create_from_url(url)
     movie = Movie.new
-    movie.url = url
+    url.strip!
 
     begin
       page = Nokogiri::HTML(open(url))
+      movie.url = url
       name = page.search('.pagetitle span').first.content
       movie.name = name
       wikitext = page.search('#wikitext')

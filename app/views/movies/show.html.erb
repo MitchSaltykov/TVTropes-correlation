@@ -21,7 +21,7 @@
       <% common_tropes = (@movie.tropes & other_movie.tropes).sort_by(&:name) %>
       <td><%= link_to other_movie.name, other_movie %></td>
       <td>
-        <%= number_to_percentage correlation, :precision => 2 %>
+        <%= number_to_percentage correlation * 100, :precision => 0 %>
         <%= "(#{common_tropes.size}/#{[@movie.tropes.size, other_movie.tropes.size].min})" %>
       </td>
       <td><%= common_trope_links(common_tropes) %></td>
